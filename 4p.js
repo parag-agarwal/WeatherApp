@@ -1,0 +1,227 @@
+var map = L.map('map').setView([51.505, -0.09], 3);
+var lt=40.7141667,lg=-74.0063889,flag=0,formattedTime="",place="",weather="",time="",color=null,backgroundimage=null,icon="";
+var data4={"address":{"country":"","city":"","longitude":"","latitude":""},"parameters":{"temperature":0,"humidity":0,"pressure":0,"maxtemp":0,"mintemp":0, "visibility":0},"weather":{"main":"","Description":""}};
+
+var themes={"01d":"#3672AA","01n":"#2b2845","02d":"#87CEFA","02n":"#2b2845","03d":"#D8EDF2","03n":"#132030","04d":"#A2A2D0","04n":"3b3f48","09d":"#4c6370"};
+var fixed=0,gmt=0,zone="",hourChoice="H",c=0,forecastHtml="";
+
+
+
+var x = document.getElementById("locator");
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+function showPosition(position) {
+  fakeClick(position.coords.latitude, position.coords.longitude);
+}
+
+
+
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+  maxZoom: 18,
+  minZoom: 2,
+  attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+    '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+    'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+  id: 'mapbox.streets'
+}).addTo(map);
+
+
+
+
+
+var popup = L.popup();
+
+function onMapClick(e) {
+  flag=0;
+  var temp=e.latlng;
+  lt=temp.lat;
+  lg=temp.lng;
+  getData(lt,lg);
+  setInterval(function(){getData(lt,lg);},1000*60*5);
+  //$(".data").html("latitude: "+lt+" Longitude: "+lg);
+//  popup
+//    .setLatLng(e.latlng)
+//    .setContent()
+//    .openOn(map);
+
+    L.marker([lt, lg]).addTo(map).on("click",onClick);
+}
+
+function fakeClick(lat,long){
+  flag=0;
+  getData(lat,long);
+  L.marker([lat, long]).addTo(map).on("click",onClick);
+  map=map.setView([lat, long], 5);
+}
+
+function onClick(){
+  flag=0;
+  var ltlg=this.getLatLng();
+  lt=ltlg.lat;
+  lg=ltlg.lng;
+  getData(lt,lg);
+}
+
+function getData(lat, long){
+  moment.tz.setDefault("GMT");
+  place="";
+  weather="";
+  forecastHtml="";
+  var link="http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+long+"&appid=1c60cbbee63e0b5fa88237f945858152";
+  $.getJSON(link,function(json){
+    if(json.cod==="404"&&flag===0){
+      flag=1;
+      if(long>0){
+        var temp=Math.floor(long/360);
+        long-=temp*360;
+      }
+      else if(long<0){
+        long*=-1;
+        var temp=Math.floor(long/360);
+        long-=temp*360;
+        long-=360;
+        long*=-1;
+      }
+      getData(lat, long);
+    }
+    data4.address.place="";
+    if(json.name) data4.address.place=json.name;
+    data4.address.country="";
+    if(json.sys.country!=="none") data4.address.country=getCountryName(json.sys.country);
+    place+="<h1 id='name'>"+json.name+"</h1><h1 id='country'>"+getCountryName(data4.address.country)+"</h1>";
+    weather+="<h1><span id='temperature'>"+convertTo(json.main.temp,2)+"</span></br>"+convertStatus(json.weather[0].main)+"</h1>";
+    weather+=" <img class='icon' src='"+"images/"+json.weather[0].icon+".png"+"'>";
+    weather+="<h1 id='humidity'><img style='width:15%' src='humidityicon.png'>"+json.main.humidity+"%</h1><h1 id='wind'><img style='width:15%;margin-top:-1%' src='windicon.png'> "+degToCard(json.wind.deg)+" at "+Math.floor(Number(json.wind.speed)*2.23694)+" MPH";
+    setTime(lat,long);
+    icon=json.weather[0].icon;
+  });
+}
+
+function setTime(lat,long){
+  var linktime="http://api.timezonedb.com/?lat="+lat+"&lng="+long+"&format=json&key=0F23GMEFRVHI";
+  time="";
+  $.getJSON(linktime,function(jsonOut){
+    zone=jsonOut.zoneName;
+    $.getJSON("http://api.timezonedb.com/?lat=51.48&lng=0.00&format=json&key=0F23GMEFRVHI",function(jsonIn){  //execute inside
+      gmt=Number(jsonIn.timestamp)*1000;
+      c = moment(gmt).tz(zone);
+      var zoneDate=c.format("ddd, MMM Do YYYY");
+      var zoneTime=c.format(hourChoice+":mm:ss");
+      if(icon.indexOf('d')===-1){
+        $(".data").css("background-image","url('night.jpg')");
+        $("#slide1").css("background-image","url('night.jpg')");
+      }
+      else{
+        $(".data").css("background-image","url('day1.jpg')");
+        $("#slide1").css("background-image","url('day1.jpg')");
+      }
+      $("#place").html(place);
+      $("#time").html("<h1>"+zoneDate+"</h1><h1>"+zoneTime+"</h1>");
+      $("#weather").html(weather);
+      fixed=new Date().getTime();   //local time when clicked the map
+      forecast(lat,long);
+      update();
+      setInterval(update,500);
+    });
+  });
+}
+
+var degToCard = function(deg){
+  if(deg<0) deg+=360;
+  if (deg>11.25 && deg<33.75){
+    return "NNE";
+  }else if (deg>33.75 && deg<56.25){
+    return "ENE";
+  }else if (deg>56.25 && deg<78.75){
+    return "E";
+  }else if (deg>78.75 && deg<101.25){
+    return "ESE";
+  }else if (deg>101.25 && deg<123.75){
+    return "ESE";
+  }else if (deg>123.75 && deg<146.25){
+    return "SE";
+  }else if (deg>146.25 && deg<168.75){
+    return "SSE";
+  }else if (deg>168.75 && deg<191.25){
+    return "S";
+  }else if (deg>191.25 && deg<213.75){
+    return "SSW";
+  }else if (deg>213.75 && deg<236.25){
+    return "SW";
+  }else if (deg>236.25 && deg<258.75){
+    return "WSW";
+  }else if (deg>258.75 && deg<281.25){
+    return "W";
+  }else if (deg>281.25 && deg<303.75){
+    return "WNW";
+  }else if (deg>303.75 && deg<326.25){
+    return "NW";
+  }else if (deg>326.25 && deg<348.75){
+    return "NNW";
+  }else{
+    return "N";
+  }
+}
+
+function update(){
+  var current=new Date().getTime();
+  var secondsPassed=current-fixed;
+  var currentZonalTime=gmt+secondsPassed;
+  c = moment(currentZonalTime).tz(zone);
+  var zoneDate=c.format("ddd, MMM Do YYYY"); //dddd, MMMM Do YYYY, h:mm:ss A
+  var zoneTime=c.format(hourChoice+":mm:ss");
+  $("#time").html("<h1>"+zoneDate+"</h1><h1>"+zoneTime+"</h1>");
+}
+
+function convertTo(temp,x){
+  if(x===1){
+    return (Math.round(Number(temp))-273)+"<span style='font-size:80%'>&#x2103;</span>";
+  }
+  else if(x===2){
+    temp=((Math.round(Number(temp))-273)*9)/5+32;
+    return Math.round(temp)+"<span style='font-size:80%'>&#x2109;</span>";
+  }
+}
+
+function convertStatus(status){
+  switch(status){
+    case "Rain":
+      return "Raining";
+      break;
+    case "Clouds":
+      return "Cloudy";
+      break;
+    case "Haze":
+      return "Hazy";
+      break;
+  }
+  return status;
+}
+
+function forecast(lat,long){
+  var forecastHtml="<hr>";
+  var temp=c.add(1,'d');
+  var jsonlink="http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+long+"&appid=1c60cbbee63e0b5fa88237f945858152";
+  $.getJSON(jsonlink,function(json){
+    json.list.forEach(function(val){
+      if(val.dt*1000>=temp){
+        var nextDate=temp.format("ddd MM/DD");
+        var temperature=convertTo(val.main.temp,2);
+        var icon="images/"+val.weather[0].icon+".png";
+        forecastHtml+="<h2>"+nextDate.toUpperCase()+"</h2><h2>"+temperature+"<img id='forecasticon' src='"+icon+"'></h2><hr>";
+        temp = temp.add(1,'d');
+      }
+    });
+    $("#forecast").html(forecastHtml);
+  });
+}
+
+$(document).ready(function(){
+  fakeClick(lt,lg);
+  map.on('click', onMapClick);
+});

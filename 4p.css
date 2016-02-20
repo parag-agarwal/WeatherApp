@@ -1,0 +1,150 @@
+#slide2{
+  background-color: pink;
+  margin:0;
+  padding:0;
+}
+
+#map{
+   width: 70%;
+   height: 100%;
+   float:left;
+   border: 2px solid black;
+}
+
+#slide1{
+  width:100%;
+  height:100%;
+  border: 2px solid black;
+  background-image:url("day1.jpg");
+}
+
+#forecasticon{
+  width:55%;max-height:12%;margin-top:-5%;margin-bottom:-5%;
+}
+
+#locator{
+  width: 100px;
+  height:100px;
+}
+
+.data{
+  overflow:hidden;
+  width: 30%;
+  height: 100%;
+  max-height:100%;
+  overflow-y:auto;
+  background-image:url("day1.jpg");
+  background-size: cover;
+  background-position: left;
+  border: 2px solid black;
+}
+
+.icon{
+  width: 100%;
+  max-width: 280px;
+  max-height: 250px;
+  margin-left:-2%;
+  margin-right: -2%;
+}
+
+h1{
+  text-shadow: 1px 0 darkgray, 0 -1px darkgray, -1px 0 darkgray, 0 1px darkgray;
+}
+
+#weather,#place,#time{
+  font-family: "Open Sans";
+  width:auto;
+  max-width:100%;
+  font-weight: 400;
+  margin:0;
+  padding:0;
+}
+
+#place{
+  background-color: brown;
+}
+
+#weather{
+  width:60%;
+  max-width:60%;
+  float: left;
+  background-color: yellow;
+}
+
+hr{
+  border-color: #555555 !important;
+  margin-right: 15%;
+}
+
+#forecast{
+  background-color: green;
+  font-size: 90%;
+  color: white;
+  font-family: "Open Sans";
+  overflow:hidden;
+  width:auto;
+}
+
+#name{
+  font-family: "Open Sans",sans-serif;
+  font-size: 3.7em;
+  margin-bottom: -1%;
+  color: white;
+  font-weight:700;
+}
+
+#country{
+  font-family: "Open Sans",sans-serif;
+  font-size: 2.2em;
+  color: white;
+  font-weight: 400;
+}
+
+#time{
+  width: auto;
+  color: gold;
+  font-family: "Open Sans",sans-serif;
+  background-color: lavender;
+}
+
+#temperature{
+  font-family:"Open Sans",sans-serif;
+  font-size: 260%;
+  font-weight: 700;
+  color: white;
+  margin-bottom: -1%;
+}
+
+#weather{
+  background-color:black;
+}
+
+#weather h1{
+  color: white;
+}
+
+@media screen and (max-width:600px),(orientation: portrait){
+  #map{
+    width:100%;
+    height:75%;
+    float:none;
+  }
+
+  .data{
+    width:100%;
+    height:25%;
+  }
+
+  #time{
+    font-family: "Corbel";
+    margin:0;
+    height:auto;
+    width:auto;
+  }
+
+  #weather{
+    width:auto;
+    height:auto;
+    margin:0;
+  }
+}
