@@ -7,7 +7,7 @@ var fixed=0,gmt=0,zone="",hourChoice="H",c=0,forecastHtml="",tempUnitChoice=1,te
 
 
 
-var x = document.getElementById("locator");
+var x = document.getElementById("located");
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -42,7 +42,7 @@ function onMapClick(e) {
   lt=temp.lat;
   lg=temp.lng;
   getData(lt,lg);
-  setInterval(function(){getData(lt,lg);},1000*60*5);
+  setInterval(function(){getData(lt,lg);},1000*60*10);
   //$(".data").html("latitude: "+lt+" Longitude: "+lg);
 //  popup
 //    .setLatLng(e.latlng)
@@ -97,10 +97,10 @@ function getData(lat, long){
     place+="<h1 id='name'>"+json.name+"</h1><h1 id='country'>"+getCountryName(data4.address.country)+"</h1>";
     tval=json.main.temp;
     temper+="<h1><span id='temperature'>"+convertTo(tval,tempUnitChoice)+"</span></h1>";
-    weather+="<h1>"+convertStatus(json.weather[0].main)+" <span id='tempunits'><a id='cunit'>&#x2103;</a> |<a id='funit'>&#x2109;</a></span></h1><img class='icon' src='"+"images/"+json.weather[0].icon+".png'>";
-    weather+="<h1 id='humidity'><img style='width:15%;margin-right:3%' src='humidityicon.png'>"+json.main.humidity+"%</h1>";
-    weather+="<h1 id='wind'><img style='width:15%;margin-top:-1%' src='windicon.png'> "+degToCard(json.wind.deg)+" at "+Math.floor(Number(json.wind.speed)*2.23694)+" MPH</h1>";
-    weather+="<h1 id='pressure'><img style='width:15%;margin-top:-1%' src='pressure.png'> "+(json.main.pressure/1000).toPrecision(3)+" bar</h1>";
+    weather+="<h1>"+convertStatus(json.weather[0].main)+" <span id='tempunits'><a class='cunit'>&#x2103;</a> |<a class='funit'>&#x2109;</a></span></h1><img class='icon' src='"+"images/"+json.weather[0].icon+".png'>";
+    weather+="<h1 class='humidity'><img src='humidityicon.png'> "+json.main.humidity+"%</h1>";
+    weather+="<h1 class='wind'><img src='windicon.png'> "+degToCard(json.wind.deg)+" at "+Math.floor(Number(json.wind.speed)*2.23694)+" MPH</h1>";
+    weather+="<h1 class='pressure'><img src='pressure.png'> "+(json.main.pressure/1000).toPrecision(3)+" bar</h1>";
     setTime(lat,long);
     icon=json.weather[0].icon;
   });
@@ -117,36 +117,38 @@ function setTime(lat,long){
       var zoneDate=c.format("ddd, MMM Do YYYY");
       var zoneTime=c.format(hourChoice+":mm:ss");
       if(icon.indexOf('d')===-1){
-        $(".data").css("background-image","url('night.jpg')");
-        $("#slide1").css("background-image","url('night.jpg')");
+        $("body").css("background-image","url('night.jpg')");
       }
       else{
-        $(".data").css("background-image","url('day1.jpg')");
-        $("#slide1").css("background-image","url('day1.jpg')");
+        $("body").css("background-image","url('day1.jpg')");
       }
-      $("#place").html(place);
-      $("#time").html("<h1>"+zoneDate+"</h1><h1>"+zoneTime+"</h1>");
-      $("#temper").html(temper);
-      $("#weather").html(weather);
+      $(".place").html(place);
+      $(".time").html("<h1>"+zoneDate+"</h1><h1>"+zoneTime+"</h1>");
+      $(".temper").html(temper);
+      $(".weather").html(weather);
+      place="";
+      time="";
+      temper="";
+      weather="";
       if(tempUnitChoice===1){
-        $("#cunit").css("pointer-events","none");
-        $("#cunit").css("cursor","none");
-        $("#funit").css("pointer-events","auto");
-        $("#funit").css("cursor","pointer");
-        $("#cunit").css("font-size","110%");
-        $("#funit").css("font-size","100%");
-        $("#cunit").css("color","white");
-        $("#funit").css("color","#BBBBBB");
+        $(".cunit").css("pointer-events","none");
+        $(".cunit").css("cursor","none");
+        $(".funit").css("pointer-events","auto");
+        $(".funit").css("cursor","pointer");
+        $(".cunit").css("font-size","110%");
+        $(".funit").css("font-size","100%");
+        $(".cunit").css("color","white");
+        $(".funit").css("color","#BBBBBB");
       }
       else{
-        $("#funit").css("pointer-events","none");
-        $("#funit").css("cursor","none");
-        $("#cunit").css("pointer-events","auto");
-        $("#cunit").css("cursor","pointer");
-        $("#funit").css("font-size","110%");
-        $("#cunit").css("font-size","100%");
-        $("#funit").css("color","white");
-        $("#cunit").css("color","#BBBBBB");
+        $(".funit").css("pointer-events","none");
+        $(".funit").css("cursor","none");
+        $(".cunit").css("pointer-events","auto");
+        $(".cunit").css("cursor","pointer");
+        $(".funit").css("font-size","110%");
+        $(".cunit").css("font-size","100%");
+        $(".funit").css("color","white");
+        $(".cunit").css("color","#BBBBBB");
       }
       fixed=new Date().getTime();   //local time when clicked the map
       forecast(lat,long);
@@ -200,7 +202,7 @@ function update(){
   c = moment(currentZonalTime).tz(zone);
   var zoneDate=c.format("ddd, MMM Do YYYY"); //dddd, MMMM Do YYYY, h:mm:ss A
   var zoneTime=c.format(hourChoice+":mm:ss");
-  $("#time").html("<h1>"+zoneDate+"</h1><h1>"+zoneTime+"</h1>");
+  $(".time").html("<h1>"+zoneDate+"</h1><h1>"+zoneTime+"</h1>");
 }
 
 function convertTo(temp,x,id){
@@ -230,12 +232,12 @@ function convertStatus(status){
 
 function changeTempUnit(){
   var changed="<h1><span id='temperature'>"+convertTo(tval,tempUnitChoice)+"</span></h1>";
-  $("#temper").html(changed);
+  $(".temper").html(changed);
   var fchanged="<hr>",iterator=0;
   forecastTemperatures.forEach(function(val){
     fchanged+="<h2>"+forecastDates[iterator].toUpperCase()+"</h2><h2>"+convertTo(val,tempUnitChoice)+"<img id='forecasticon' src='"+forecastIcons[iterator]+"'></h2><hr>";
   });
-  $("#forecast").html(fchanged);
+  $(".forecast").html(fchanged);
 }
 
 function forecast(lat,long){
@@ -258,35 +260,48 @@ function forecast(lat,long){
         temp = temp.add(1,'d');
       }
     });
-    $("#forecast").html(forecastHtml);
+    $(".forecast").html(forecastHtml);
   });
 }
 
 $(document).ready(function(){
   map.on('click', onMapClick);
   fakeClick(lt,lg);
-  $("#weather").on("click",'#cunit',function(){
+  $(".weather").on("click",'.cunit',function(){
     tempUnitChoice=1;
     changeTempUnit();
-    $("#cunit").css("pointer-events","none");
-    $("#cunit").css("cursor","none");
-    $("#funit").css("pointer-events","auto");
-    $("#funit").css("cursor","pointer");
-    $("#cunit").css("font-size","110%");
-    $("#funit").css("font-size","100%");
-    $("#cunit").css("color","white");
-    $("#funit").css("color","#BBBBBB");
+    $(".cunit").css("pointer-events","none");
+    $(".cunit").css("cursor","none");
+    $(".funit").css("pointer-events","auto");
+    $(".funit").css("cursor","pointer");
+    $(".cunit").css("font-size","110%");
+    $(".funit").css("font-size","100%");
+    $(".cunit").css("color","white");
+    $(".funit").css("color","#BBBBBB");
   });
-  $("#weather").on("click",'#funit',function(){
+  $(".weather").on("click",'.funit',function(){
     tempUnitChoice=2;
     changeTempUnit();
-    $("#funit").css("pointer-events","none");
-    $("#funit").css("cursor","none");
-    $("#cunit").css("pointer-events","auto");
-    $("#cunit").css("cursor","pointer");
-    $("#funit").css("font-size","110%");
-    $("#cunit").css("font-size","100%");
-    $("#funit").css("color","white");
-    $("#cunit").css("color","#BBBBBB");
+    $(".funit").css("pointer-events","none");
+    $(".funit").css("cursor","none");
+    $(".cunit").css("pointer-events","auto");
+    $(".cunit").css("cursor","pointer");
+    $(".funit").css("font-size","110%");
+    $(".cunit").css("font-size","100%");
+    $(".funit").css("color","white");
+    $(".cunit").css("color","#BBBBBB");
   });
+
+  $("#homeButton").on("click",function(){
+    $("#slide1").css("z-index","100");
+    $("#slide1").css("visibility","visible");
+    $("#slide2").css("z-index","0");
+    $("#slide2").css("visibility","hidden");
+  });
+  $("#mapButton").on("click",function(){
+    $("#slide2").css("z-index","100");
+    $("#slide2").css("visibility","visible");
+    $("#slide1").css("z-index","0");
+    $("#slide1").css("visibility","hidden");
+  })
 });

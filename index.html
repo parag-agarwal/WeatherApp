@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 		<link rel="stylesheet" href="4p.css"/>
+		<link rel="stylesheet" href="slide1.css"/>
 		<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 	</head>
@@ -14,19 +15,27 @@
 
 
 	<body>
+		<div id="header">
+			<button id="homeButton"">Home</button>
+			<button id="locate"  onClick="getLocation()"><img id="locationIcon" src="locationIcon.png"><p id="located"></p></button>
+			<button id="mapButton">Map</button>
+		</div>
 		<div id="slide1">
-			<button onclick="getLocation()">click</button>
-			<div id="locator"></div>
+			<div class="place"></div>
+			<div class="time"></div>
+			<div class="temper"></div>
+			<div class="weather"></div>
+			<div class="forecast"></div>
 		</div>
 
 		<div id="slide2">
 			<div id="map"></div>
 			<div class="data">
-				<div id="place"></div>
-				<div id="time"></div>
-				<div id="temper"></div>
-				<div id="weather"></div>
-				<div id="forecast"></div>
+				<div class="place"></div>
+				<div class="time"></div>
+				<div class="temper"></div>
+				<div class="weather"></div>
+				<div class="forecast"></div>
 			</div>
 		</div>
 

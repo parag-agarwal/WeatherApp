@@ -1,53 +1,97 @@
-#slide2{
+body{
+  background-image:url(day1.jpg);
+}
+
+#header{
+  height: 5%;
+  width: 100%;
+  min-height: 30px;
+  text-align: center;
+  border-bottom: 1px solid #888888;
+}
+
+#homeButton,#mapButton,#locate{
+  display: inline-block;
+  border: none;
+  color: #FFFFFF;
+  height: 100%;
   margin:0;
+  font-size: 110%;
+}
+
+#homeButton{
+  padding-left: 3%;
+  padding-right: 3%;
+  border-right: 1px solid #888888;
+}
+
+#mapButton{
+  padding-left: 3%;
+  padding-right: 3%;
+  border-left: 1px solid #888888;
+}
+
+#slide2{
+  height: 100%;
+  width:100%;
+  margin:0;
+  position:fixed;
   padding:0;
+  z-index:0;
+  visibility: hidden;
 }
 
 #map{
    width: 70%;
    height: 100%;
    float:left;
-   border: 2px solid black;
+   border-top: 1px solid black;
 }
 
 #slide1{
+  display: inline-block;;
+  margin:0;
+  position:fixed;
   width:100%;
   height:100%;
-  border: 2px solid black;
-  background-image:url("day1.jpg");
+  z-index:1000;
 }
 
 #forecasticon{
   width:55%;max-height:12%;margin-top:-5%;margin-bottom:-5%;
 }
 
-#locator{
-  width: 100px;
-  height:100px;
-}
-
 .data{
+  display:inherit;
   overflow:hidden;
   width: 30%;
-  height: 100%;
+  height: 95%;
   max-height:100%;
   overflow-y:auto;
-  background-image:url("day1.jpg");
   background-size: cover;
   background-position: left;
-  border: 2px solid black;
+  border: 1px solid black;
+}
+
+#locationIcon{
+  max-height: 70%;
+  margin-left: 3%;
+  margin-right:3%;
+}
+
+button{
+  max-height: 100%;
+  background-color: Transparent;
+  min-width: 6%;
 }
 
 .icon{
+  display: inherit;
   width: 100%;
   max-width: 280px;
   max-height: 250px;
   margin-left:-2%;
   margin-right: -2%;
-}
-
-h1{
-  text-shadow: 1px 0 darkgray, 0 -1px darkgray, -1px 0 darkgray, 0 1px darkgray;
 }
 
 #tempunits{
@@ -58,11 +102,12 @@ h1{
   font-family: serif;
 }
 
-#cunit,#funit{
+.cunit,.funit{
   text-align: justify;
 }
 
-#weather,#place,#time,#temper{
+.weather,.place,.time,.temper{
+  display: inherit;
   font-family: "Open Sans";
   width:auto;
   max-width:100%;
@@ -72,7 +117,7 @@ h1{
   margin-left: 2%;
 }
 
-#weather,#temper{
+.weather,.temper{
   width:60%;
   max-width:60%;
   float: left;
@@ -84,7 +129,7 @@ hr{
   margin-right: 15%;
 }
 
-#forecast{
+.forecast{
   font-size: 90%;
   color: white;
   font-family: "Open Sans";
@@ -107,7 +152,7 @@ hr{
   font-weight: 400;
 }
 
-#time{
+.time{
   width: auto;
   color: gold;
   font-family: "Open Sans",sans-serif;
@@ -120,9 +165,23 @@ hr{
   font-size: 260%;font-weight: 700;
 }
 
-#weather h1{
+.weather h1{
   color: white;
 }
+
+.humidity img,.wind img,.pressure img{
+  width:13%;
+}
+
+
+
+/*Home page css*/
+
+#slide1 #temperature h1{
+  margin-top: 10%;
+}
+
+
 
 @media screen and (max-width:600px),(orientation: portrait){
   #map{
@@ -136,14 +195,14 @@ hr{
     height:25%;
   }
 
-  #time{
+  .time{
     font-family: "Corbel";
     margin:0;
     height:auto;
     width:auto;
   }
 
-  #weather{
+  .weather{
     width:auto;
     height:auto;
     margin:0;
