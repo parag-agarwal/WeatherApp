@@ -3,7 +3,7 @@ var lt=40.7141667,lg=-74.0063889,flag=0,formattedTime="",place="",weather="",tim
 var data4={"address":{"country":"","city":"","longitude":"","latitude":""},"parameters":{"temperature":0,"humidity":0,"pressure":0,"maxtemp":0,"mintemp":0, "visibility":0},"weather":{"main":"","Description":""}};
 
 var themes={"01d":"#3672AA","01n":"#2b2845","02d":"#87CEFA","02n":"#2b2845","03d":"#D8EDF2","03n":"#132030","04d":"#A2A2D0","04n":"3b3f48","09d":"#4c6370"};
-var fixed=0,gmt=0,zone="",hourChoice="H",c=0,forecastHtml="";
+var fixed=0,gmt=0,zone="",hourChoice="H",c=0,forecastHtml="",tempUnitChoice=1,temper="",mainTemperature=0,forecastTemperatures=[],forecastIcons=[],forecastDates=[],tval=0;
 
 
 
@@ -72,6 +72,7 @@ function getData(lat, long){
   place="";
   weather="";
   forecastHtml="";
+  temper="";
   var link="http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+long+"&appid=1c60cbbee63e0b5fa88237f945858152";
   $.getJSON(link,function(json){
     if(json.cod==="404"&&flag===0){
@@ -94,9 +95,12 @@ function getData(lat, long){
     data4.address.country="";
     if(json.sys.country!=="none") data4.address.country=getCountryName(json.sys.country);
     place+="<h1 id='name'>"+json.name+"</h1><h1 id='country'>"+getCountryName(data4.address.country)+"</h1>";
-    weather+="<h1><span id='temperature'>"+convertTo(json.main.temp,2)+"</span></br>"+convertStatus(json.weather[0].main)+"</h1>";
-    weather+=" <img class='icon' src='"+"images/"+json.weather[0].icon+".png"+"'>";
-    weather+="<h1 id='humidity'><img style='width:15%' src='humidityicon.png'>"+json.main.humidity+"%</h1><h1 id='wind'><img style='width:15%;margin-top:-1%' src='windicon.png'> "+degToCard(json.wind.deg)+" at "+Math.floor(Number(json.wind.speed)*2.23694)+" MPH";
+    tval=json.main.temp;
+    temper+="<h1><span id='temperature'>"+convertTo(tval,tempUnitChoice)+"</span></h1>";
+    weather+="<h1>"+convertStatus(json.weather[0].main)+" <span id='tempunits'><a id='cunit'>&#x2103;</a> |<a id='funit'>&#x2109;</a></span></h1><img class='icon' src='"+"images/"+json.weather[0].icon+".png'>";
+    weather+="<h1 id='humidity'><img style='width:15%;margin-right:3%' src='humidityicon.png'>"+json.main.humidity+"%</h1>";
+    weather+="<h1 id='wind'><img style='width:15%;margin-top:-1%' src='windicon.png'> "+degToCard(json.wind.deg)+" at "+Math.floor(Number(json.wind.speed)*2.23694)+" MPH</h1>";
+    weather+="<h1 id='pressure'><img style='width:15%;margin-top:-1%' src='pressure.png'> "+(json.main.pressure/1000).toPrecision(3)+" bar</h1>";
     setTime(lat,long);
     icon=json.weather[0].icon;
   });
@@ -122,7 +126,28 @@ function setTime(lat,long){
       }
       $("#place").html(place);
       $("#time").html("<h1>"+zoneDate+"</h1><h1>"+zoneTime+"</h1>");
+      $("#temper").html(temper);
       $("#weather").html(weather);
+      if(tempUnitChoice===1){
+        $("#cunit").css("pointer-events","none");
+        $("#cunit").css("cursor","none");
+        $("#funit").css("pointer-events","auto");
+        $("#funit").css("cursor","pointer");
+        $("#cunit").css("font-size","110%");
+        $("#funit").css("font-size","100%");
+        $("#cunit").css("color","white");
+        $("#funit").css("color","#BBBBBB");
+      }
+      else{
+        $("#funit").css("pointer-events","none");
+        $("#funit").css("cursor","none");
+        $("#cunit").css("pointer-events","auto");
+        $("#cunit").css("cursor","pointer");
+        $("#funit").css("font-size","110%");
+        $("#cunit").css("font-size","100%");
+        $("#funit").css("color","white");
+        $("#cunit").css("color","#BBBBBB");
+      }
       fixed=new Date().getTime();   //local time when clicked the map
       forecast(lat,long);
       update();
@@ -178,7 +203,7 @@ function update(){
   $("#time").html("<h1>"+zoneDate+"</h1><h1>"+zoneTime+"</h1>");
 }
 
-function convertTo(temp,x){
+function convertTo(temp,x,id){
   if(x===1){
     return (Math.round(Number(temp))-273)+"<span style='font-size:80%'>&#x2103;</span>";
   }
@@ -203,17 +228,33 @@ function convertStatus(status){
   return status;
 }
 
+function changeTempUnit(){
+  var changed="<h1><span id='temperature'>"+convertTo(tval,tempUnitChoice)+"</span></h1>";
+  $("#temper").html(changed);
+  var fchanged="<hr>",iterator=0;
+  forecastTemperatures.forEach(function(val){
+    fchanged+="<h2>"+forecastDates[iterator].toUpperCase()+"</h2><h2>"+convertTo(val,tempUnitChoice)+"<img id='forecasticon' src='"+forecastIcons[iterator]+"'></h2><hr>";
+  });
+  $("#forecast").html(fchanged);
+}
+
 function forecast(lat,long){
+  forecastTemperatures=[];
+  forecastIcons=[];
+  forecastDates=[];
   var forecastHtml="<hr>";
   var temp=c.add(1,'d');
   var jsonlink="http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+long+"&appid=1c60cbbee63e0b5fa88237f945858152";
   $.getJSON(jsonlink,function(json){
     json.list.forEach(function(val){
       if(val.dt*1000>=temp){
-        var nextDate=temp.format("ddd MM/DD");
-        var temperature=convertTo(val.main.temp,2);
+        var nextDate=moment((val.dt)*1000).tz(zone).format("ddd MM/DD");
+        forecastDates.push(nextDate);
         var icon="images/"+val.weather[0].icon+".png";
-        forecastHtml+="<h2>"+nextDate.toUpperCase()+"</h2><h2>"+temperature+"<img id='forecasticon' src='"+icon+"'></h2><hr>";
+        forecastIcons.push(icon);
+        var temperatureVal=convertTo(val.main.temp,tempUnitChoice);
+        forecastTemperatures.push(val.main.temp);
+        forecastHtml+="<h2>"+nextDate.toUpperCase()+"</h2><h2>"+temperatureVal+"<img id='forecasticon' src='"+icon+"'></h2><hr>";
         temp = temp.add(1,'d');
       }
     });
@@ -222,6 +263,30 @@ function forecast(lat,long){
 }
 
 $(document).ready(function(){
-  fakeClick(lt,lg);
   map.on('click', onMapClick);
+  fakeClick(lt,lg);
+  $("#weather").on("click",'#cunit',function(){
+    tempUnitChoice=1;
+    changeTempUnit();
+    $("#cunit").css("pointer-events","none");
+    $("#cunit").css("cursor","none");
+    $("#funit").css("pointer-events","auto");
+    $("#funit").css("cursor","pointer");
+    $("#cunit").css("font-size","110%");
+    $("#funit").css("font-size","100%");
+    $("#cunit").css("color","white");
+    $("#funit").css("color","#BBBBBB");
+  });
+  $("#weather").on("click",'#funit',function(){
+    tempUnitChoice=2;
+    changeTempUnit();
+    $("#funit").css("pointer-events","none");
+    $("#funit").css("cursor","none");
+    $("#cunit").css("pointer-events","auto");
+    $("#cunit").css("cursor","pointer");
+    $("#funit").css("font-size","110%");
+    $("#cunit").css("font-size","100%");
+    $("#funit").css("color","white");
+    $("#cunit").css("color","#BBBBBB");
+  });
 });

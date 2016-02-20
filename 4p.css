@@ -1,5 +1,4 @@
 #slide2{
-  background-color: pink;
   margin:0;
   padding:0;
 }
@@ -51,24 +50,33 @@ h1{
   text-shadow: 1px 0 darkgray, 0 -1px darkgray, -1px 0 darkgray, 0 1px darkgray;
 }
 
-#weather,#place,#time{
+#tempunits{
+  color: #CCCCCC;
+  font-weight: 100;
+  font-size: 60%;
+  text-shadow: none;
+  font-family: serif;
+}
+
+#cunit,#funit{
+  text-align: justify;
+}
+
+#weather,#place,#time,#temper{
   font-family: "Open Sans";
   width:auto;
   max-width:100%;
   font-weight: 400;
   margin:0;
   padding:0;
+  margin-left: 2%;
 }
 
-#place{
-  background-color: brown;
-}
-
-#weather{
+#weather,#temper{
   width:60%;
   max-width:60%;
   float: left;
-  background-color: yellow;
+  color: white;
 }
 
 hr{
@@ -77,7 +85,6 @@ hr{
 }
 
 #forecast{
-  background-color: green;
   font-size: 90%;
   color: white;
   font-family: "Open Sans";
@@ -104,19 +111,13 @@ hr{
   width: auto;
   color: gold;
   font-family: "Open Sans",sans-serif;
-  background-color: lavender;
 }
 
 #temperature{
   font-family:"Open Sans",sans-serif;
-  font-size: 260%;
-  font-weight: 700;
   color: white;
   margin-bottom: -1%;
-}
-
-#weather{
-  background-color:black;
+  font-size: 260%;font-weight: 700;
 }
 
 #weather h1{
