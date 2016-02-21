@@ -136,8 +136,8 @@ function setTime(lat,long){
         $(".funit").css("pointer-events","auto");
         $(".funit").css("cursor","pointer");
         $(".cunit").css("font-size","110%");
-        $(".funit").css("font-size","100%");
-        $(".cunit").css("color","white");
+        $(".funit").css("font-size","95%");
+        $(".cunit").css("color","#DDDDDD");
         $(".funit").css("color","#BBBBBB");
       }
       else{
@@ -146,8 +146,8 @@ function setTime(lat,long){
         $(".cunit").css("pointer-events","auto");
         $(".cunit").css("cursor","pointer");
         $(".funit").css("font-size","110%");
-        $(".cunit").css("font-size","100%");
-        $(".funit").css("color","white");
+        $(".cunit").css("font-size","95%");
+        $(".funit").css("color","#DDDDDD");
         $(".cunit").css("color","#BBBBBB");
       }
       fixed=new Date().getTime();   //local time when clicked the map
@@ -256,7 +256,7 @@ function forecast(lat,long){
         forecastIcons.push(icon);
         var temperatureVal=convertTo(val.main.temp,tempUnitChoice);
         forecastTemperatures.push(val.main.temp);
-        forecastHtml+="<h2>"+nextDate.toUpperCase()+"</h2><h2>"+temperatureVal+"<img id='forecasticon' src='"+icon+"'></h2><hr>";
+        forecastHtml+="<h2>"+nextDate.toUpperCase()+"</h2><h2 class='ftval'>"+temperatureVal+"</h2><img id='forecasticon' src='"+icon+"'><hr>";
         temp = temp.add(1,'d');
       }
     });
