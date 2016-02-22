@@ -235,7 +235,7 @@ function changeTempUnit(){
   $(".temper").html(changed);
   var fchanged="<hr>",iterator=0;
   forecastTemperatures.forEach(function(val){
-    fchanged+="<h2>"+forecastDates[iterator].toUpperCase()+"</h2><h2>"+convertTo(val,tempUnitChoice)+"<img id='forecasticon' src='"+forecastIcons[iterator]+"'></h2><hr>";
+    fchanged+="<h2>"+forecastDates[iterator].toUpperCase()+"</h2><h2>"+convertTo(val,tempUnitChoice)+"</h2><img id='forecasticon' src='"+forecastIcons[iterator]+"'><hr>";
   });
   $(".forecast").html(fchanged);
 }
