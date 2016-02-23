@@ -169,18 +169,33 @@ button{max-height: 100%;background-color: Transparent;min-width: 6%;}
   }
 
   #slide1 .weather,#slide2 .weather{
-    width: 55%;
+    width: 52% !important;
+  }
+
+  #slide2 .weather{
+    margin-bottom: 5%;
+  }
+
+  #slide2 .weather h1{
+    font-size: 1.1em;
   }
 
   #slide1 .forecast,#slide2 .forecast{
-    max-width: 45% !important;
+    width: 48% !important;
+    max-width: 48% !important;
     margin-left:0;
     padding-left:0;
   }
 
   #slide1 .forecast h2,#slide2 .forecast h2{
-    font-size: 1em;
+    display: inline-block;
+    font-size: 1.1em;
     margin-top: -3%;
     margin-bottom: -3%;
+  }
+  #slide2 #forecasticon,#slide1 #forecasticon{
+    margin-top: -2.9%;margin-bottom:-2.9%;
+    display: inline-block;
+    max-width: 60px !important;
   }
 }
