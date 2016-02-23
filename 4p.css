@@ -125,7 +125,7 @@ button{max-height: 100%;background-color: Transparent;min-width: 6%;}
 }
 
 
-@media screen and (max-width:400px) and (orientation: portrait){
+@media screen and (max-device-width:400px) and (orientation: portrait){
   #header{height: 8%;}
   #locate{width: 20%;}
   #slide1,.data{margin:0%;width: 100%;padding-left: 2%;}
@@ -189,7 +189,8 @@ button{max-height: 100%;background-color: Transparent;min-width: 6%;}
 
   #slide1 .forecast h2,#slide2 .forecast h2{
     display: inline-block;
-    font-size: 1.1em;
+    font-size: 1.05em;
+    margin-right: 2%;
     margin-top: -3%;
     margin-bottom: -3%;
   }
