@@ -136,9 +136,9 @@ function setTime(lat,long){
         $(".funit").css("pointer-events","auto");
         $(".funit").css("cursor","pointer");
         $(".cunit").css("font-size","110%");
-        $(".funit").css("font-size","100%");
-        $(".cunit").css("color","white");
-        $(".funit").css("color","#BBBBBB");
+        $(".funit").css("font-size","95%");
+        $(".cunit").css("color","#FFFFFF");
+        $(".funit").css("color","#DDDDDD");
       }
       else{
         $(".funit").css("pointer-events","none");
@@ -146,9 +146,9 @@ function setTime(lat,long){
         $(".cunit").css("pointer-events","auto");
         $(".cunit").css("cursor","pointer");
         $(".funit").css("font-size","110%");
-        $(".cunit").css("font-size","100%");
-        $(".funit").css("color","white");
-        $(".cunit").css("color","#BBBBBB");
+        $(".cunit").css("font-size","95%");
+        $(".funit").css("color","#FFFFFF");
+        $(".cunit").css("color","#DDDDDD");
       }
       fixed=new Date().getTime();   //local time when clicked the map
       forecast(lat,long);
@@ -235,7 +235,7 @@ function changeTempUnit(){
   $(".temper").html(changed);
   var fchanged="<hr>",iterator=0;
   forecastTemperatures.forEach(function(val){
-    fchanged+="<h2>"+forecastDates[iterator].toUpperCase()+"</h2><h2>"+convertTo(val,tempUnitChoice)+"<img id='forecasticon' src='"+forecastIcons[iterator]+"'></h2><hr>";
+    fchanged+="<h2>"+forecastDates[iterator].toUpperCase()+"</h2><h2>"+convertTo(val,tempUnitChoice)+"</h2><img id='forecasticon' src='"+forecastIcons[iterator]+"'><hr>";
   });
   $(".forecast").html(fchanged);
 }
@@ -256,7 +256,7 @@ function forecast(lat,long){
         forecastIcons.push(icon);
         var temperatureVal=convertTo(val.main.temp,tempUnitChoice);
         forecastTemperatures.push(val.main.temp);
-        forecastHtml+="<h2>"+nextDate.toUpperCase()+"</h2><h2>"+temperatureVal+"<img id='forecasticon' src='"+icon+"'></h2><hr>";
+        forecastHtml+="<h2>"+nextDate.toUpperCase()+"</h2><h2 class='ftval'>"+temperatureVal+"</h2><img id='forecasticon' src='"+icon+"'><hr>";
         temp = temp.add(1,'d');
       }
     });
@@ -277,7 +277,7 @@ $(document).ready(function(){
     $(".cunit").css("font-size","110%");
     $(".funit").css("font-size","100%");
     $(".cunit").css("color","white");
-    $(".funit").css("color","#BBBBBB");
+    $(".funit").css("color","#DDDDDD");
   });
   $(".weather").on("click",'.funit',function(){
     tempUnitChoice=2;
@@ -289,7 +289,7 @@ $(document).ready(function(){
     $(".funit").css("font-size","110%");
     $(".cunit").css("font-size","100%");
     $(".funit").css("color","white");
-    $(".cunit").css("color","#BBBBBB");
+    $(".cunit").css("color","#DDDDDD");
   });
 
   $("#homeButton").on("click",function(){
