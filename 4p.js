@@ -137,8 +137,8 @@ function setTime(lat,long){
         $(".funit").css("cursor","pointer");
         $(".cunit").css("font-size","110%");
         $(".funit").css("font-size","95%");
-        $(".cunit").css("color","#DDDDDD");
-        $(".funit").css("color","#BBBBBB");
+        $(".cunit").css("color","#FFFFFF");
+        $(".funit").css("color","#DDDDDD");
       }
       else{
         $(".funit").css("pointer-events","none");
@@ -147,8 +147,8 @@ function setTime(lat,long){
         $(".cunit").css("cursor","pointer");
         $(".funit").css("font-size","110%");
         $(".cunit").css("font-size","95%");
-        $(".funit").css("color","#DDDDDD");
-        $(".cunit").css("color","#BBBBBB");
+        $(".funit").css("color","#FFFFFF");
+        $(".cunit").css("color","#DDDDDD");
       }
       fixed=new Date().getTime();   //local time when clicked the map
       forecast(lat,long);
@@ -277,7 +277,7 @@ $(document).ready(function(){
     $(".cunit").css("font-size","110%");
     $(".funit").css("font-size","100%");
     $(".cunit").css("color","white");
-    $(".funit").css("color","#BBBBBB");
+    $(".funit").css("color","#DDDDDD");
   });
   $(".weather").on("click",'.funit',function(){
     tempUnitChoice=2;
@@ -289,7 +289,7 @@ $(document).ready(function(){
     $(".funit").css("font-size","110%");
     $(".cunit").css("font-size","100%");
     $(".funit").css("color","white");
-    $(".cunit").css("color","#BBBBBB");
+    $(".cunit").css("color","#DDDDDD");
   });
 
   $("#homeButton").on("click",function(){
