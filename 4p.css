@@ -1,4 +1,4 @@
-body{background-image:url(day1.jpg);}
+body{background-image:url(day1.jpg);background-size:cover;}
 
 /*header*/
 #header{height: 5%;width: 100%;min-height: 30px;text-align: center;border-bottom: 1px solid #888888;background-color:rgba(80,80,80,0.2);}
